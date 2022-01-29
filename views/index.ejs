@@ -1,0 +1,33 @@
+<!-- Create the index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs') %>
+<body>
+  
+  <!-- PARTIALS. In ejs, using include method. Don't forget the minus
+  include the nav partial -->
+
+  <%- include('./partials/nav.ejs') %>
+
+  <div class="blogs content">
+    <h2>All Blogs</h2>
+
+    <!-- Showing the data in the browser -->
+    <% if (blogs.length > 0){ %>
+      <% blogs.forEach(blog => { %>
+
+        <h3 class="title"><%= blog.title %></h3>
+        <p class="snippet"><%= blog.snippet %></p>
+
+      <% }) %>
+    <% } else { %>
+      <p>There are not blogs to display...</p>
+    <% } %>
+
+  </div>
+
+  <%- include('./partials/footer.ejs') %>
+
+</body>
+</html>

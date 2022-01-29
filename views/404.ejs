@@ -1,0 +1,18 @@
+<!-- Create the about.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs') %>
+<body>
+  <!-- PARTIALS. In ejs, using include method. Don't forget the minus
+  include the nav partial -->
+
+  <%- include('./partials/nav.ejs') %>
+
+  <div class="not-found content">
+    OOPS, page not found :(
+  </div>
+
+  <%- include('./partials/footer.ejs') %>
+</body>
+</html>
