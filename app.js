@@ -1,6 +1,6 @@
 // Dependencies required
 const express = require('express');
-
+const morgan = require('morgan');
 
 // Set express app
 const app = express();
@@ -12,6 +12,9 @@ app.set('view engine', 'ejs');
 // Listen for requests
 app.listen(3000);
 
+// Middleware & static files
+app.use(express.static('public'))
+app.use(morgan('dev'));
 
 // Get requests
 app.get('/', (req, res) =>{
