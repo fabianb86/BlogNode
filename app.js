@@ -20,50 +20,10 @@ app.set('view engine', 'ejs');
 
 // Middleware & static files
 app.use(express.static('public'))
+// To get the information of the blog created (form) and convert into an object to the post request
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-// // Testing the schema and model with sandbox routes
-
-// // CREATE a new blog
-// app.get("/add-blog", (req, res) => {
-//   const blog = new Blog({
-//     title: "New Blog 2",
-//     snippet: "About my new blog",
-//     body: "More about my new blog",
-//   });
-
-//   // Save the blog created to the database
-//   blog
-//     .save()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// // READ all the documents with the method .find
-// app.get("/all-blogs", (req, res) => {
-//   Blog.find()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// // Find a single document with the .findById method
-// app.get("/single-blog", (req, res) => {
-//   Blog.findById("61f9638486b6eda2b53e1647")
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
 
 // routes
 app.get("/", (req, res) => {
@@ -88,8 +48,50 @@ app.get("/blogs", (req, res) => {
     });
 });
 
+// Post request
+app.post("/blogs", (req, res) => {
+  // Create a new instance to the new blog
+  const blog = new Blog(req.body);
+
+  blog
+    .save()
+    .then((result) => {
+      res.redirect("/blogs");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.get('/blogs/create', (req, res) => {
   res.render('create', {title: 'Create a New Blog'});
+});
+
+// Obtain the route parameter of each blog with :id
+app.get("/blogs/:id", (req, res) => {
+  // Extract the id with params
+  const id = req.params.id;
+
+  Blog.findById(id)
+    .then((result) => {
+      res.render("details", { blog: result, title: "Blog Details" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// Delete request. The response is a json object sended to the details script
+app.delete("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+
+  Blog.findByIdAndDelete(id)
+    .then(result => {
+      res.json({ redirect: "/blogs" });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 // 404 Page. Always at the bottom

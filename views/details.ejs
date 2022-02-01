@@ -1,0 +1,34 @@
+<html lang="en">
+  <%- include('./partials/head.ejs') %>
+
+  <body>
+    <%- include('./partials/nav.ejs') %>
+
+    <div class="details content">
+      <h2><%= blog.title %></h2>
+      <div class="content">
+        <p><%- blog.body %></p>
+      </div>
+      <!-- 8. To Delete the blog -->
+      <a class="delete" data-doc="<%= blog.id_%>">Delete</a>
+    </div>
+
+    <%- include('./partials/footer.ejs')%>
+  </body>
+
+  <!-- 9. Vanilla JavaScript to delete the blog from the browser and not from the server -->
+  <script>
+    const trashcan = document.querySelector("a.delete");
+
+    trashcan.addEventListener("click", (e) => {
+      const endpoint = `/blogs/${trashcan.dataset.doc}`;
+
+      fetch(endpoint, {
+        method: "delete",
+      })
+        .then((response) => response.json())
+        .then((data) => window.location.href = data.redirect)
+        .catch((err) => console.log(err));
+    });
+  </script>
+</html>
